@@ -10,7 +10,7 @@ function upload_artifact {
     local target="$2"
 
 
-    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
+    cmd="mvn -B -P s3 -Dmaven.repo.local=/var/m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
 
     echo "****************************************************************************************************"
     echo "uploading $1"

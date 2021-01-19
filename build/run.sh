@@ -10,7 +10,7 @@ function upload_artifact {
     local target="$2"
 
 
-    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
+    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
 
     echo "****************************************************************************************************"
     echo "uploading $1"
@@ -46,6 +46,6 @@ mkdir -p ${GS_VERSION}
 cd /var/workspaces/Metric/Spotinst/Dependency-Check
 DEPENDENCY_BUCKET="dependency-check-results"
 
-upload_artifact ${GS_VERSION}/ ${DEPENDENCY_BUCKET}
+upload_artifact dependency-check-report.html ${DEPENDENCY_BUCKET}
 
 rm -r ${GS_VERSION}

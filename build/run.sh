@@ -42,7 +42,6 @@ cd dependency-check/bin
 
 DEPENDENCY_BUCKET="dependency-check-results"
 
-#cp dependency-check-report.html ${GS_VERSION}/
-#upload_artifact ${GS_VERSION}/ ${DEPENDENCY_BUCKET}
+upload_artifact ${GS_VERSION}/ ${DEPENDENCY_BUCKET}
 
 rm -r ${GS_VERSION}

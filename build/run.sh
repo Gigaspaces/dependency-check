@@ -10,7 +10,7 @@ function upload_artifact {
     local target="$2"
 
 
-    cmd="mvn -B -P s3 -Dmaven.repo.local=/var/m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
+    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
 
     echo "****************************************************************************************************"
     echo "uploading $1"
@@ -37,11 +37,13 @@ ls -l /var/m2_dependency_check
 #wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/16.0.0/gigaspaces-xap-enterprise-${GS_VERSION}.zip
 #unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
 #
+pwd
 mkdir -p ${GS_VERSION}
 #cd dependency-check/bin
 
 #./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../gigaspaces-xap-enterprise-${GS_VERSION}" --out ${GS_VERSION}/
 
+cd /var/workspaces/Metric/Spotinst/Dependency-Check
 DEPENDENCY_BUCKET="dependency-check-results"
 
 upload_artifact ${GS_VERSION}/ ${DEPENDENCY_BUCKET}

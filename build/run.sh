@@ -29,8 +29,8 @@ GS_VERSION=$1
 echo "test"
 echo ${GS_VERSION}
 echo $M2
-
-ls -l /var/m2_check
+ls -l var
+ls -l /var/m2_dependency_check
 
 ##wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
 #unzip dependency-check-6.0.5-release.zip

@@ -40,7 +40,7 @@ echo ${GS_VERSION}
 echo $M2
 DEPENDENCY_BUCKET="dependency-check-results"
 mkdir -p ${GS_VERSION}
-cp dependency-check-report.html {GS_VERSION}/
-upload_artifact {GS_VERSION}/ ${DEPENDENCY_BUCKET}
+cp dependency-check-report.html ${GS_VERSION}/
+upload_artifact ${GS_VERSION}/ ${DEPENDENCY_BUCKET}
 
 rm -r ${GS_VERSION}

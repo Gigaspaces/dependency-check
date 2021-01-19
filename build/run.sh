@@ -10,7 +10,7 @@ function upload_artifact {
     local target="$2"
 
 
-    cmd="mvn -B -P s3 -Dmaven.repo.local=$M2/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
+    cmd="mvn -B -P s3 -Dmaven.repo.local=/var/m2_check com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
 
     echo "****************************************************************************************************"
     echo "uploading $1"
@@ -31,14 +31,14 @@ echo ${GS_VERSION}
 echo $M2
 
 ##wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
-unzip dependency-check-6.0.5-release.zip
-wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/16.0.0/gigaspaces-xap-enterprise-${GS_VERSION}.zip
-unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
+#unzip dependency-check-6.0.5-release.zip
+#wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/16.0.0/gigaspaces-xap-enterprise-${GS_VERSION}.zip
+#unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
 #
 mkdir -p ${GS_VERSION}
-cd dependency-check/bin
+#cd dependency-check/bin
 
-./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../gigaspaces-xap-enterprise-${GS_VERSION}" --out ${GS_VERSION}/
+#./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../gigaspaces-xap-enterprise-${GS_VERSION}" --out ${GS_VERSION}/
 
 DEPENDENCY_BUCKET="dependency-check-results"
 

@@ -30,6 +30,14 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <dependencies>
+        <dependency>
+            <version>${xap.version}</version>
+            <groupId>org.gigaspaces</groupId>
+            <artifactId>xap-openspaces</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
     <plugins>
          <plugin>

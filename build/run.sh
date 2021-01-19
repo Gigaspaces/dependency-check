@@ -10,7 +10,7 @@ function upload_artifact {
     local target="$2"
 
 
-    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
+    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
 
     echo "****************************************************************************************************"
     echo "uploading $1"
@@ -29,7 +29,7 @@ GS_VERSION=$1
 echo "test"
 echo ${GS_VERSION}
 echo $M2
-ls -l var
+ls -l /var
 ls -l /var/m2_dependency_check
 
 ##wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip

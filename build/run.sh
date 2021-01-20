@@ -38,6 +38,6 @@ cd dependency-check/bin
 cd /var/workspaces/Metric/Spotinst/Dependency-Check
 DEPENDENCY_BUCKET="dependency-check-results"
 
-uploadToS3 build/${GS_VERSION} ${GS_VERSION}
+uploadToS3 build/${GS_VERSION}/ ${DEPENDENCY_BUCKET}
 
 rm -r ${GS_VERSION}

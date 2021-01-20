@@ -21,7 +21,7 @@ GS_URL=$2
 ##wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
 #unzip dependency-check-6.0.5-release.zip
 rm -r gigaspaces-*
-wget GS_URL
+wget ${GS_URL}
 unzip gigaspaces-*.zip
 rm -r gigaspaces-*.zip
 FOLDER_NAME=$(echo gigaspace*/)

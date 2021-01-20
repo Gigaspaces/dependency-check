@@ -7,8 +7,7 @@ function uploadToS3 {
     local zipPath="$1"
     local target="$2"
 
-    cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
-    cmd="mvn -B -P dependency-check -Dmaven.repo.local=/home/jenkins/.m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=meshi/ -Dput.target=dependency-check-results"
+    cmd="mvn -B -P dependency-check -Dmaven.repo.local=/home/jenkins/.m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
     echo "Executing cmd: $cmd"
     eval "$cmd"
     local r="$?"

@@ -19,7 +19,7 @@ function uploadToS3 {
 GS_VERSION=$1
 GS_URL=$2
 
-if [ ! -e "dependency-check-6.0.5-release" ]
+if [ ! -e "dependency-check" ]
 then
     if [ ! -e "dependency-check-6.0.5-release.zip" ]
     then

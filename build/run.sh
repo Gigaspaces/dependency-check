@@ -57,7 +57,8 @@ function downloadingProductZip {
 
 GS_VERSION=$1
 GS_PRODUCT=$2
-
+TIMESTAMPP=$(date +%Y%m%d-%H%M)
+export TIMESTAMP=${TIMESTAMPP}
 createDependencyCheckFolder
 downloadingProductZip
 

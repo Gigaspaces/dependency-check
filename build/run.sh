@@ -44,7 +44,8 @@ function cleanUp {
 function downloadingProductZip {
   echo "downloading zip"
   rm -r -f gigaspaces-*
-  local version=${FRED%%-*}
+  local gs_version=${GS_VERSION}
+  local version=${gs_version%%-*}
   wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
 
   echo "unzipping product"

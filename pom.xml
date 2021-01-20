@@ -14,30 +14,6 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>org.openspaces</id>
-            <name>OpenSpaces</name>
-            <url>http://maven-repository.openspaces.org</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>org.openspaces</id>
-            <name>OpenSpaces</name>
-            <url>http://maven-repository.openspaces.org</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <dependencies>
-        <dependency>
-            <version>${xap.version}</version>
-            <groupId>org.gigaspaces</groupId>
-            <artifactId>xap-openspaces</artifactId>
-        </dependency>
-    </dependencies>
-
     <build>
     <plugins>
          <plugin>
@@ -53,7 +29,5 @@
         </plugin>
     </plugins>
     </build>
-
-
 
 </project>

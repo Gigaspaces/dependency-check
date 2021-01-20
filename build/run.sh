@@ -2,20 +2,14 @@
 set -x
 
 
-function upload_artifact {
-# $1 = zipPath
-# $2 = target
-    echo "uploading zip $1 to "
+function uploadToS3 {
+    echo "uploading html $1 to "
     local zipPath="$1"
     local target="$2"
 
-
     cmd="mvn -B -Dmaven.repo.local=/var/m2_dependency_check com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
-
-    echo "****************************************************************************************************"
-    echo "uploading $1"
+    cmd="mvn -B -P dependency-check -Dmaven.repo.local=/home/jenkins/.m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=meshi/ -Dput.target=dependency-check-results"
     echo "Executing cmd: $cmd"
-    echo "****************************************************************************************************"
     eval "$cmd"
     local r="$?"
     if [ "$r" -eq 1 ]
@@ -25,27 +19,26 @@ function upload_artifact {
     fi
 }
 
+
 GS_VERSION=$1
 echo "test"
 echo ${GS_VERSION}
 echo $M2
-ls -l /var
-ls -l /var/m2_dependency_check
 
 ##wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
 #unzip dependency-check-6.0.5-release.zip
 #wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/16.0.0/gigaspaces-xap-enterprise-${GS_VERSION}.zip
-#unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
+unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
 #
 pwd
 mkdir -p ${GS_VERSION}
-#cd dependency-check/bin
+cd dependency-check/bin
 
-#./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../gigaspaces-xap-enterprise-${GS_VERSION}" --out ${GS_VERSION}/
+./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../gigaspaces-xap-enterprise-${GS_VERSION}" --out ${GS_VERSION}/
 
 cd /var/workspaces/Metric/Spotinst/Dependency-Check
 DEPENDENCY_BUCKET="dependency-check-results"
 
-upload_artifact dependency-check-report.html ${DEPENDENCY_BUCKET}
+uploadToS3 build/${GS_VERSION} $${GS_VERSION}
 
 rm -r ${GS_VERSION}

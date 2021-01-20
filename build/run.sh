@@ -44,5 +44,5 @@ DEPENDENCY_BUCKET="dependency-check-results"
 uploadToS3 /var/workspaces/Metric/Spotinst/Dependency-Check/build/dependency-check/bin/${GS_VERSION}/ ${DEPENDENCY_BUCKET}
 
 
-rm -r ${WORKSPACE}/build/dependency-check/bin/${GS_VERSION}
-rm -r ${WORKSPACE}/gigaspaces-*
+rm -r ${WORKSPACE}/build/${GS_VERSION}
+rm -r ${WORKSPACE}/build/gigaspaces-*

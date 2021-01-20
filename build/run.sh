@@ -24,10 +24,12 @@ rm -r gigaspaces-*
 wget GS_URL
 unzip gigaspaces-*.zip
 rm -r gigaspaces-*.zip
+FOLDER_NAME=$(echo gigaspace*/)
 
 mkdir -p ${GS_VERSION}
+
 cd dependency-check/bin
-./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../gigaspaces-*" --out ${GS_VERSION}/
+./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../${FOLDER_NAME}" --out ${GS_VERSION}/
 
 echo ${WORKSPACE}
 cd /var/workspaces/Metric/Spotinst/Dependency-Check

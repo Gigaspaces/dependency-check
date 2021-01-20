@@ -43,8 +43,9 @@ function cleanUp {
 
 function downloadingProductZip {
   echo "downloading zip"
-  rm -r gigaspaces-*
-  wget ${GS_URL}
+  rm -r -f gigaspaces-*
+  local version=${FRED%%-*}
+  wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
 
   echo "unzipping product"
   unzip gigaspaces-*.zip
@@ -54,7 +55,8 @@ function downloadingProductZip {
 
 
 GS_VERSION=$1
-GS_URL=$2
+GS_PRODUCT=$2
+
 createDependencyCheckFolder
 downloadingProductZip
 
@@ -64,7 +66,7 @@ mkdir -p ${GS_VERSION}
 ./dependency-check/bin/dependency-check.sh --project "${FOLDER_NAME}" --scan "${WORKSPACE}/build/${FOLDER_NAME}" --out ${WORKSPACE}/build/${GS_VERSION}/
 
 DEPENDENCY_BUCKET="dependency-check-results"
-uploadToS3 ${WORKSPACE}/build/${GS_VERSION}/ ${DEPENDENCY_BUCKET}
+uploadToS3 ${WORKSPACE}/build/${GS_VERSION}/ ${DEPENDENCY_BUCKET}/${GS_PRODUCT}
 
 
 cleanUp

@@ -28,7 +28,7 @@ echo $M2
 ##wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
 #unzip dependency-check-6.0.5-release.zip
 #wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/16.0.0/gigaspaces-xap-enterprise-${GS_VERSION}.zip
-unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
+#unzip gigaspaces-xap-enterprise-${GS_VERSION}.zip
 #
 pwd
 mkdir -p ${GS_VERSION}

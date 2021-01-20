@@ -1,9 +1,27 @@
 #!/usr/bin/env sh
 set -x
+
+
+function createDependencyCheckFolder {
+  echo "create dependency check folder"
+  if [ ! -e "dependency-check" ]
+then
+    echo "folder does not exist"
+    if [ ! -e "dependency-check-6.0.5-release.zip" ]
+    then
+      echo "dependency-check-6.0.5-release.zip does not exist, downloading"
+      wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
+    fi
+	unzip dependency-check-6.0.5-release.zip
+fi
+
+}
+
 function uploadToS3 {
     echo "uploading html $1 to "
     local zipPath="$1"
     local target="$2"
+    cd ${WORKSPACE}
     cmd="mvn -B -P dependency-check -Dmaven.repo.local=/home/jenkins/.m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
     echo "Executing cmd: $cmd"
     eval "$cmd"
@@ -16,33 +34,37 @@ function uploadToS3 {
 }
 
 
+function cleanUp {
+  echo "clean up"
+  rm -r -f ${WORKSPACE}/build/${GS_VERSION}
+  rm -r -f ${WORKSPACE}/build/gigaspaces-*
+}
+
+
+function downloadingProductZip {
+  echo "downloading zip"
+  rm -r gigaspaces-*
+  wget ${GS_URL}
+
+  echo "unzipping product"
+  unzip gigaspaces-*.zip
+  rm -r gigaspaces-*.zip
+}
+
+
+
 GS_VERSION=$1
 GS_URL=$2
+createDependencyCheckFolder
+downloadingProductZip
 
-if [ ! -e "dependency-check" ]
-then
-    if [ ! -e "dependency-check-6.0.5-release.zip" ]
-    then
-      wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
-    fi
-	unzip dependency-check-6.0.5-release.zip
-fi
-
-rm -r gigaspaces-*
-wget ${GS_URL}
-unzip gigaspaces-*.zip
-rm -r gigaspaces-*.zip
 FOLDER_NAME=$(echo gigaspace*/)
-
 mkdir -p ${GS_VERSION}
 
-cd dependency-check/bin
-./dependency-check.sh --project "xap-${GS_VERSION}" --scan "../../${FOLDER_NAME}" --out ${GS_VERSION}/
+./dependency-check/bin/dependency-check.sh --project "${FOLDER_NAME}" --scan "${WORKSPACE}/build/${FOLDER_NAME}" --out ${WORKSPACE}/build/${GS_VERSION}/
 
-cd ${WORKSPACE}
 DEPENDENCY_BUCKET="dependency-check-results"
-uploadToS3 /var/workspaces/Metric/Spotinst/Dependency-Check/build/dependency-check/bin/${GS_VERSION}/ ${DEPENDENCY_BUCKET}
+uploadToS3 ${WORKSPACE}/build/${GS_VERSION}/ ${DEPENDENCY_BUCKET}
 
 
-rm -r ${WORKSPACE}/build/${GS_VERSION}
-rm -r ${WORKSPACE}/build/gigaspaces-*
+cleanUp

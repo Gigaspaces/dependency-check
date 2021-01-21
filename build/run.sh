@@ -39,6 +39,14 @@ function cleanUp {
   rm -r -f ${WORKSPACE}/build/${GS_VERSION}
   rm -r -f ${WORKSPACE}/build/gigaspaces-*
 }
+function getProductBucket {
+	if [ ${GS_VERSION} == 'xap' ]
+	then
+	    echo 'xap'
+	else
+	    echo 'insightedge'
+	fi
+}
 
 
 function downloadingProductZip {
@@ -46,7 +54,9 @@ function downloadingProductZip {
   rm -r -f gigaspaces-*
   local gs_version=${GS_VERSION}
   local version=${gs_version%%-*}
-  wget https://gigaspaces-releases-eu.s3.amazonaws.com/xap/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
+  local product="$(getProductBucket)"
+
+  wget https://gigaspaces-releases-eu.s3.amazonaws.com/${product}/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
 
   echo "unzipping product"
   unzip gigaspaces-*.zip

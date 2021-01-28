@@ -40,7 +40,7 @@ function cleanUp {
   rm -r -f ${WORKSPACE}/build/gigaspaces-*
 }
 function getProductBucket {
-	if [ ${GS_VERSION} == 'xap' ]
+	if [ ${GS_PRODUCT} == 'xap' ]
 	then
 	    echo 'xap'
 	else

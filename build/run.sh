@@ -43,7 +43,7 @@ function getProductBucket {
 	then
 	    echo 'xap'
 	else
-	    echo 'insightedge'
+	    echo 'smart-cache'
 	fi
 }
 

@@ -11,14 +11,14 @@ pipeline {
         MVN_JENKINSID = 'xapbuilder-settings'
         MVN_JAVA_OPTS = '-Xmx8192m -Xms4096m'
         MVN_JAVA = 'Java8'
-        GS_VERSION = params.GS_VERSION
-        GS_PRODUCT = params.GS_PRODUCT
+        GS_VERSION = "${GS_VERSION}"
+        GS_PRODUCT = "${GS_PRODUCT}"
     }
     stages {
         stage('run') {
             steps {
                 dir('build') {
-                    echo 'GS_VERSION: ${GS_VERSION}'
+                    echo "GS_VERSION: ${GS_VERSION}"
                 }
             }
         }

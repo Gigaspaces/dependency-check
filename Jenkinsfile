@@ -19,7 +19,7 @@ pipeline {
     stages {
         stage('run') {
             steps {
-                withMaven(mavenSettingsConfig: MVN_JENKINSID, mavenOpts: MVN_JAVA_OPTS jdk: MVN_JAVA, traceability: true) {
+                withMaven(mavenSettingsConfig: MVN_JENKINSID, mavenOpts: MVN_JAVA_OPTS, jdk: MVN_JAVA, traceability: true) {
                     dir('build') {
                         echo "GS_VERSION: ${GS_VERSION}"
                         sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"

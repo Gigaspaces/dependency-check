@@ -22,10 +22,11 @@ pipeline {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'xap-ops-automation',
-                    accessKeyVariable: 'user',
-                    secretKeyVariable: 'key'
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     dir('build') {
+                        echo "AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}"
                         echo "GS_VERSION: ${GS_VERSION}"
                         sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"
                     }

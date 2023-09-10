@@ -56,7 +56,7 @@ function downloadingProductZip {
   local version=${gs_version%%-*}
   local product="$(getProductBucket)"
 
-  wget https://gigaspaces-releases-eu.s3.amazonaws.com/${product}/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
+  wget https://gs-releases-us-east-1.s3.amazonaws.com/${product}/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
 
   echo "unzipping product"
   unzip gigaspaces-*.zip

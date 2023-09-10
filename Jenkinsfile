@@ -19,6 +19,7 @@ pipeline {
             steps {
                 dir('build') {
                     echo "GS_VERSION: ${GS_VERSION}"
+                    sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"
                 }
             }
         }

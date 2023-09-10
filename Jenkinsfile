@@ -22,8 +22,8 @@ pipeline {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'xap-ops-automation',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    accessKeyVariable: 'user',
+                    secretKeyVariable: 'key'
                 ]]) {
                     dir('build') {
                         echo "GS_VERSION: ${GS_VERSION}"

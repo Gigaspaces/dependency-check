@@ -11,15 +11,21 @@ pipeline {
         MVN_JENKINSID = 'xapbuilder-settings'
         MVN_JAVA_OPTS = '-Xmx8192m -Xms4096m'
         MVN_JAVA = 'Java8'
+        S3_REGION = 'us-east-1'
+        S3_CREDS = 'xap-ops-automation'
         GS_VERSION = "${GS_VERSION}"
         GS_PRODUCT = "${GS_PRODUCT}"
     }
     stages {
         stage('run') {
             steps {
-                dir('build') {
-                    echo "GS_VERSION: ${GS_VERSION}"
-                    sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"
+                withAWS(region: S3_REGION,
+                    credentials: S3_CREDS
+                    ) {
+                    dir('build') {
+                        echo "GS_VERSION: ${GS_VERSION}"
+                        sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"
+                    }
                 }
             }
         }

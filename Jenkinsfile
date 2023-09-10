@@ -19,9 +19,12 @@ pipeline {
     stages {
         stage('run') {
             steps {
-                withAWS(region: S3_REGION,
-                    credentials: S3_CREDS
-                    ) {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'xap-ops-automation',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
                     dir('build') {
                         echo "GS_VERSION: ${GS_VERSION}"
                         sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"

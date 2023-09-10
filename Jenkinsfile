@@ -8,8 +8,8 @@ pipeline {
     }
     environment {
         M2 = "$WORKSPACE/.m2_dependency_check"
-        MVN_JENKINSID = 'xapbuilder-settings'
-        MVN_JAVA_OPTS = '-Xmx8192m -Xms4096m'
+        MVN_JENKINSID = "xapbuilder-settings"
+        MVN_JAVA_OPTS = "-Xmx8192m -Xms4096m -Djava.io.tmpdir=${WORKSPACE_TMP}"
         MVN_JAVA = 'Java8'
         S3_REGION = 'us-east-1'
         S3_CREDS = 'xap-ops-automation'
@@ -19,14 +19,8 @@ pipeline {
     stages {
         stage('run') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'xap-ops-automation',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
+                withMaven(mavenSettingsConfig: MVN_JENKINSID, mavenOpts: MVN_JAVA_OPTS jdk: MVN_JAVA, traceability: true) {
                     dir('build') {
-                        echo "AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}"
                         echo "GS_VERSION: ${GS_VERSION}"
                         sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"
                     }

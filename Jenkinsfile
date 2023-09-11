@@ -31,17 +31,8 @@ pipeline {
         stage ('prepare') {
             steps {
                 script {
-                    if (fileExists(DEPCHECK_DIR)) {
-                        echo "Deleting stale dependency-check directory"
-                        sh "rm -rf ${DEPCHECK_DIR}"
-                    }
+                    sh 'printenv'
                 }
-                echo "Downloading latest dependency-check release"
-                sh '''
-                    VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
-                    curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-                    unzip dependency-check.zip
-                '''
                 withAWS(region: S3_REGION, credentials: S3_CREDS) {
                     script {
                         if (s3DoesObjectExist(bucket: S3_RELEASE_BUCKET, path: S3_RELEASE_FILE )) {
@@ -56,21 +47,9 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/build/${GS_VERSION}/")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/build/${GS_VERSION}/ --format JENKINS,HTML,JSON --prettyPrint")
             }
         }
-        /*
-        stage('run') {
-            steps {
-                withMaven(mavenSettingsConfig: MVN_JENKINSID, mavenOpts: MVN_JAVA_OPTS, jdk: MVN_JAVA, traceability: true) {
-                    dir('build') {
-                        echo "GS_VERSION: ${GS_VERSION}"
-                        sh "./run.sh ${GS_VERSION} ${GS_PRODUCT}"
-                    }
-                }
-            }
-        }
-        */
     }
     post {
         always {

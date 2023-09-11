@@ -22,7 +22,7 @@ pipeline {
         S3_REGION = 'us-east-1'
         S3_CREDS = 'xap-ops-automation'
         S3_RELEASE_BUCKET = 'gs-releases-us-east-1'
-        S3_RELEASE_PREFIX = "${PRODUCT}/${GS_BASE_VERSION}"
+        S3_RELEASE_PREFIX = "${GS_PRODUCT}/${GS_BASE_VERSION}"
         S3_RELEASE_FILE = "${S3_RELEASE_PREFIX}/${GS_RELEASE_FILE}"
         DEPCHECK_DIR = "dependency-check"
     }

@@ -3,17 +3,14 @@ set -x
 
 
 function createDependencyCheckFolder {
-  echo "create dependency check folder"
-  if [ ! -e "dependency-check" ]
+  echo "delete dependency check folder (if exists)"
+  if [ -d "dependency-check" ]
   then
-      echo "folder does not exist"
-      if [ ! -e "dependency-check-6.0.5-release.zip" ]
-      then
-        echo "dependency-check-6.0.5-release.zip does not exist, downloading"
-        wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
-      fi
-    unzip dependency-check-6.0.5-release.zip
+    rm -rf "dependency-check"
   fi
+  echo "create dependency check folder"
+  wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-8.4.0-release.zip
+  unzip dependency-check-6.0.5-release.zip
 }
 
 function uploadToS3 {

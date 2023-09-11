@@ -44,7 +44,7 @@ pipeline {
                 withAWS(region: S3_REGION, credentials: S3_CREDS) {
                     script {
                         if (s3DoesObjectExist(bucket: S3_RELEASE_BUCKET, path: S3_RELEASE_FILE )) {
-                            s3Download(bucket: S3_RELEASE_BUCKET, path: S3_RELEASE_FILE)
+                            s3Download(bucket: S3_RELEASE_BUCKET, path: S3_RELEASE_FILE, file: GS_RELEASE_FILE)
                             unzip(zipFile: GS_RELEASE_FILE)
                         } else {
                             echo "Could not find file ${S3_RELEASE_FILE} in bucket ${S3_RELEASE_BUCKET}"

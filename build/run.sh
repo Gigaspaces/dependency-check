@@ -10,7 +10,7 @@ function createDependencyCheckFolder {
   fi
   echo "create dependency check folder"
   wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
-  unzip dependency-check-6.0.5-release.zip
+  unzip dependency-check-8.4.0-release.zip
 }
 
 function uploadToS3 {

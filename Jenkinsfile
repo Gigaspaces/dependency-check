@@ -56,7 +56,7 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_FOLDER_NAME} --scan ${WORKSPACE}/build/${GS_FOLDER_NAME} --out ${WORKSPACE}/build/${GS_VERSION}/")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/build/${GS_RELEASE_DIR} --out ${WORKSPACE}/build/${GS_VERSION}/")
             }
         }
         /*

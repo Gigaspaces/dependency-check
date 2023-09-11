@@ -50,7 +50,7 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/${CHECK_FILENAME} --format HTML --format XML --prettyprint")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/${CHECK_FILENAME} --format HTML --format XML --prettyPrint")
             }
         }
         stage ('upload') {

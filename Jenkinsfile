@@ -49,17 +49,17 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/build/${GS_VERSION}/${CHECK_FILENAME} --format HTML")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/${CHECK_FILENAME} --format HTML")
             }
         }
         stage ('upload') {
             steps {
                 withAWS(region: S3_REGION, credentials: S3_CREDS) {
                     echo "Uploading check file."
-                    echo "Source: ${WORKSPACE}/build/${GS_VERSION}/${CHECK_FILENAME}"
+                    echo "Source: ${WORKSPACE}/${CHECK_FILENAME}"
                     echo "Bucket: ${S3_CHECK_BUCKET}"
                     echo "Path:   ${S3_CHECK_PREFIX}"
-                    s3Upload(file:"${WORKSPACE}/build/${GS_VERSION}/${CHECK_FILENAME}", bucket:"${S3_CHECK_BUCKET}", path:"${S3_CHECK_PREFIX}/")
+                    s3Upload(file:"${WORKSPACE}/${CHECK_FILENAME}", bucket:"${S3_CHECK_BUCKET}", path:"${S3_CHECK_PREFIX}/")
                 }
             }
         }

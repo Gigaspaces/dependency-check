@@ -60,7 +60,7 @@ pipeline {
                     echo "Source: ${WORKSPACE}/${CHECK_FILENAME}"
                     echo "Bucket: ${S3_CHECK_BUCKET}"
                     echo "Path:   ${S3_CHECK_PREFIX}"
-                    s3Upload(file:"${WORKSPACE}/${CHECK_FILENAME}", bucket:"${S3_CHECK_BUCKET}", path:"${S3_CHECK_PREFIX}/")
+                    s3Upload(file:"${WORKSPACE}/${CHECK_FILENAME}", bucket:"${S3_CHECK_BUCKET}", path:"${S3_CHECK_PREFIX}/", acl: 'PublicRead')
                 }
             }
         }

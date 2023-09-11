@@ -15,24 +15,8 @@ pipeline {
         S3_CREDS = 'xap-ops-automation'
         GS_VERSION = "${GS_VERSION}"
         GS_PRODUCT = "${GS_PRODUCT}"
-        DEPCHECK_DIR = "dependency-check"
     }
     stages {
-        stage ('prepare') {
-            steps {
-                if (fileExists(DEPCHECK_DIR)) {
-                    echo "Deleting stale dependency-check directory"
-                    sh "rm -rf ${DEPCHECK_DIR}"
-                }
-                echo "Downloading latest dependency-check release"
-                sh '''
-                    VERSION=$(curl -s https://jeremylong.github.io/DependencyCheck/current.txt)
-                    curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
-                    unzip dependency-check.zip
-                '''
-            }
-        }
-        /*
         stage('run') {
             steps {
                 withMaven(mavenSettingsConfig: MVN_JENKINSID, mavenOpts: MVN_JAVA_OPTS, jdk: MVN_JAVA, traceability: true) {
@@ -43,7 +27,6 @@ pipeline {
                 }
             }
         }
-        */
     }
     post {
         always {

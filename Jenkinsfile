@@ -18,7 +18,8 @@ pipeline {
         GS_VERSION = "${GS_VERSION}"
         GS_PRODUCT = "${GS_PRODUCT}"
         GS_BASE_VERSION = getMajorVersion(GS_VERSION)
-        GS_RELEASE_FILE = "gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip"
+        GS_RELEASE_DIR = "gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}"
+        GS_RELEASE_FILE = "${GS_RELEASE_DIR}.zip"
         S3_REGION = 'us-east-1'
         S3_CREDS = 'xap-ops-automation'
         S3_RELEASE_BUCKET = 'gs-releases-us-east-1'
@@ -51,6 +52,11 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+        stage ('run') {
+            steps {
+                dependencyCheck(additionalArguments: "--project "${GS_FOLDER_NAME}" --scan "${WORKSPACE}/build/${GS_FOLDER_NAME}" --out ${WORKSPACE}/build/${GS_VERSION}/")
             }
         }
         /*

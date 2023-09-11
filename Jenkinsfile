@@ -25,7 +25,9 @@ pipeline {
         S3_RELEASE_BUCKET = 'gs-releases-us-east-1'
         S3_RELEASE_PREFIX = "${GS_PRODUCT}/${GS_BASE_VERSION}"
         S3_RELEASE_FILE = "${S3_RELEASE_PREFIX}/${GS_RELEASE_FILE}"
-        DEPCHECK_DIR = "dependency-check"
+        S3_CHECK_BUCKET = "gspaces-dependency-check"
+        S3_CHECK_PREFIX = "${S3_RELEASE_PREFIX}"
+        CHECK_FILENAME = "dependency-check-report-${BUILD_NUMBER}.html"
     }
     stages {
         stage ('prepare') {
@@ -47,7 +49,18 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/build/${GS_VERSION}/ --format JENKINS --format HTML")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/build/${GS_VERSION}/${CHECK_FILENAME} --format JENKINS --format HTML")
+            }
+        }
+        stage ('upload') {
+            steps {
+                withAWS(region: S3_REGION, credentials: S3_CREDS) {
+                    echo "Uploading check file."
+                    echo "Source: ${WORKSPACE}/build/${GS_VERSION}/${CHECK_FILENAME}"
+                    echo "Bucket: ${S3_CHECK_BUCKET}"
+                    echo "Path:   ${S3_CHECK_PREFIX}"
+                    s3Upload(file:"${WORKSPACE}/build/${GS_VERSION}/${CHECK_FILENAME}", bucket:"${S3_CHECK_BUCKET}", path:"${S3_CHECK_PREFIX}/")
+                }
             }
         }
     }

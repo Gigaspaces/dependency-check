@@ -20,9 +20,11 @@ pipeline {
     stages {
         stage ('prepare') {
             steps {
-                if (fileExists(DEPCHECK_DIR)) {
-                    echo "Deleting stale dependency-check directory"
-                    sh "rm -rf ${DEPCHECK_DIR}"
+                script {
+                    if (fileExists(DEPCHECK_DIR)) {
+                        echo "Deleting stale dependency-check directory"
+                        sh "rm -rf ${DEPCHECK_DIR}"
+                    }
                 }
                 echo "Downloading latest dependency-check release"
                 sh '''

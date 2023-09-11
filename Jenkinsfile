@@ -1,3 +1,7 @@
+String getMajorVersion (versionString) {
+    return versionString.replaceAll('-(.*)','')
+}
+
 pipeline {
     agent {
         label 'gs-builder-large-ng'
@@ -11,10 +15,15 @@ pipeline {
         MVN_JENKINSID = "xapbuilder-settings"
         MVN_JAVA_OPTS = "-Xmx8192m -Xms4096m -Djava.io.tmpdir=${WORKSPACE_TMP}"
         MVN_JAVA = 'Java8'
-        S3_REGION = 'us-east-1'
-        S3_CREDS = 'xap-ops-automation'
         GS_VERSION = "${GS_VERSION}"
         GS_PRODUCT = "${GS_PRODUCT}"
+        GS_BASE_VERSION = getMajorVersion(GS_VERSION)
+        GS_RELEASE_FILE = "gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip"
+        S3_REGION = 'us-east-1'
+        S3_CREDS = 'xap-ops-automation'
+        S3_RELEASE_BUCKET = 'gs-releases-us-east-1'
+        S3_RELEASE_PREFIX = "${PRODUCT}/${GS_BASE_VERSION}"
+        S3_RELEASE_FILE = "${S3_RELEASE_PREFIX}/${GS_RELEASE_FILE}"
         DEPCHECK_DIR = "dependency-check"
     }
     stages {
@@ -32,6 +41,14 @@ pipeline {
                     curl -Ls "https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip" --output dependency-check.zip
                     unzip dependency-check.zip
                 '''
+            }
+            withAWS(region: S3_REGION, credentials: S3_CREDS) {
+                if (s3DoesObjectExist(bucket: S3_RELEASE_BUCKET, path: S3_RELEASE_FILE )) {
+                    s3Download(bucket: S3_RELEASE_BUCKET, path: S3_RELEASE_FILE)
+                    unzip(zipFile: GS_RELEASE_FILE)
+                } else {
+                    echo "Could not find file ${S3_RELEASE_FILE} in bucket ${S3_RELEASE_BUCKET}"
+                }
             }
         }
         /*

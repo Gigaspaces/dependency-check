@@ -28,6 +28,7 @@ pipeline {
         S3_CHECK_BUCKET = "gspaces-dependency-check"
         S3_CHECK_PREFIX = "${S3_RELEASE_PREFIX}"
         CHECK_FILENAME = "dependency-check-report-${BUILD_NUMBER}.html"
+        S3_CHECK_URL = "https://${S3_CHECK_BUCKET}.s3.amazonaws.com/${S3_CHECK_PREFIX}/${CHECK_FILENAME}"
     }
     stages {
         stage ('prepare') {
@@ -65,6 +66,9 @@ pipeline {
         }
     }
     post {
+        success {
+            echo "The dependency result can be viewed here: ${S3_CHECK_URL}"
+        }
         always {
             echo 'Finished'
         }

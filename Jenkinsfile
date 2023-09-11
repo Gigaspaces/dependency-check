@@ -56,7 +56,7 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(additionalArguments: "--project "${GS_FOLDER_NAME}" --scan "${WORKSPACE}/build/${GS_FOLDER_NAME}" --out ${WORKSPACE}/build/${GS_VERSION}/")
+                dependencyCheck(additionalArguments: "--project ${GS_FOLDER_NAME} --scan ${WORKSPACE}/build/${GS_FOLDER_NAME} --out ${WORKSPACE}/build/${GS_VERSION}/")
             }
         }
         /*

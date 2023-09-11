@@ -9,7 +9,7 @@ function createDependencyCheckFolder {
     rm -rf "dependency-check"
   fi
   echo "create dependency check folder"
-  wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-8.4.0-release.zip
+  wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
   unzip dependency-check-6.0.5-release.zip
 }
 

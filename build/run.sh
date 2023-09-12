@@ -50,9 +50,8 @@ function downloadingProductZip {
   rm -r -f gigaspaces-*
   local gs_version=${GS_VERSION}
   local version=${gs_version%%-*}
-  local product="$(getProductBucket)"
 
-  wget https://gs-releases-us-east-1.s3.amazonaws.com/${product}/${version}/gigaspaces-${product}-enterprise-${GS_VERSION}.zip
+  wget https://gs-releases-us-east-1.s3.amazonaws.com/${GS_PRODUCT}/${version}/gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}.zip
 
   echo "unzipping product"
   unzip gigaspaces-*.zip

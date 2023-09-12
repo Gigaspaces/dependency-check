@@ -1,20 +1,16 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 set -x
 
 
 function createDependencyCheckFolder {
+  echo "delete dependency check folder (if exists)"
+  if [ -d "dependency-check" ]
+  then
+    rm -rf "dependency-check"
+  fi
   echo "create dependency check folder"
-  if [ ! -e "dependency-check" ]
-then
-    echo "folder does not exist"
-    if [ ! -e "dependency-check-6.0.5-release.zip" ]
-    then
-      echo "dependency-check-6.0.5-release.zip does not exist, downloading"
-      wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.5/dependency-check-6.0.5-release.zip
-    fi
-	unzip dependency-check-6.0.5-release.zip
-fi
-
+  wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
+  unzip dependency-check-8.4.0-release.zip
 }
 
 function uploadToS3 {
@@ -22,7 +18,7 @@ function uploadToS3 {
     local zipPath="$1"
     local target="$2"
     cd ${WORKSPACE}
-    cmd="mvn -B -P dependency-check -Dmaven.repo.local=/home/jenkins/.m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
+    cmd="mvn -B -P dependency-check -Dmaven.repo.local=${WORKSPACE}/.m2_dependency_check/repository com.gigaspaces:xap-build-plugin:deploy-native -Dput.source=${zipPath} -Dput.target=${target}"
     echo "Executing cmd: $cmd"
     eval "$cmd"
     local r="$?"
@@ -38,6 +34,14 @@ function cleanUp {
   echo "clean up"
   rm -r -f ${WORKSPACE}/build/${GS_VERSION}
   rm -r -f ${WORKSPACE}/build/gigaspaces-*
+}
+function getProductBucket {
+	if [ ${GS_PRODUCT} == 'xap' ]
+	then
+	    echo 'xap'
+	else
+	    echo 'smart-cache'
+	fi
 }
 
 

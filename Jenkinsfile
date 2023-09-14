@@ -15,8 +15,6 @@ pipeline {
         MVN_JENKINSID = "xapbuilder-settings"
         MVN_JAVA_OPTS = "-Xmx8192m -Xms4096m -Djava.io.tmpdir=${WORKSPACE_TMP}"
         MVN_JAVA = 'Java8'
-        GS_VERSION = "${GS_VERSION}"
-        GS_PRODUCT = "${GS_PRODUCT}"
         GS_BASE_VERSION = getMajorVersion(GS_VERSION)
         GS_RELEASE_DIR = "gigaspaces-${GS_PRODUCT}-enterprise-${GS_VERSION}"
         GS_RELEASE_FILE = "${GS_RELEASE_DIR}.zip"
@@ -45,6 +43,13 @@ pipeline {
                             echo "Could not find file ${S3_RELEASE_FILE} in bucket ${S3_RELEASE_BUCKET}"
                         }
                     }
+                }
+            }
+        }
+        stage ('label') {
+            steps {
+                script {
+                    currentBuild.displayName = "${GS_VERSION}-${BUILD_NUMBER}"
                 }
             }
         }

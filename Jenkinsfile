@@ -27,6 +27,8 @@ pipeline {
         S3_CHECK_PREFIX = "${S3_RELEASE_PREFIX}"
         CHECK_FILENAME = "dependency-check-report-${BUILD_NUMBER}.html"
         S3_CHECK_URL = "https://${S3_CHECK_BUCKET}.s3.amazonaws.com/${S3_CHECK_PREFIX}/${CHECK_FILENAME}"
+        BUILD_LABEL = "${GS_VERSION}-${BUILD_NUMBER}"
+        REPORT_NAME = "${BUILD_LABEL}.html"
     }
     stages {
         stage ('prepare') {
@@ -49,20 +51,22 @@ pipeline {
         stage ('label') {
             steps {
                 script {
-                    currentBuild.displayName = "${GS_VERSION}-${BUILD_NUMBER}"
+                    currentBuild.displayName = "${BUILD_LABEL}"
                 }
             }
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan ${WORKSPACE}/${GS_RELEASE_DIR} --out ${WORKSPACE}/${CHECK_FILENAME} --format HTML")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan './**/*.jar' --out './' --format ALL --prettyPrint")
+                dependencyCheckPublisher(pattern: 'dependency-check-report.xml')
+                sh "cp dependency-check-report.html ${REPORT_NAME}"
             }
         }
         stage ('upload') {
             steps {
                 withAWS(region: S3_REGION, credentials: S3_CREDS) {
                     echo "Uploading check file."
-                    echo "Source: ${WORKSPACE}/${CHECK_FILENAME}"
+                    echo "Source: ${WORKSPACE}/${REPORT_NAME}"
                     echo "Bucket: ${S3_CHECK_BUCKET}"
                     echo "Path:   ${S3_CHECK_PREFIX}"
                     s3Upload(file:"${WORKSPACE}/${CHECK_FILENAME}", bucket:"${S3_CHECK_BUCKET}", path:"${S3_CHECK_PREFIX}/", acl: 'PublicRead')

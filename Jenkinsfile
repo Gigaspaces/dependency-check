@@ -57,7 +57,7 @@ pipeline {
         }
         stage ('run') {
             steps {
-                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan './**/*.jar' --out './' --format ALL --prettyPrint")
+                dependencyCheck(odcInstallation: 'dependency-check-v8.4.0', additionalArguments: "--project ${GS_RELEASE_DIR} --scan './**/*.jar' --exclude ${M2}/** --out './' --format ALL --prettyPrint")
                 dependencyCheckPublisher(pattern: 'dependency-check-report.xml')
                 sh "cp dependency-check-report.html ${REPORT_NAME}"
             }
